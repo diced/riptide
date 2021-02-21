@@ -6,6 +6,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'eval',
+      aliases: ['ev'],
       devOnly: true
     }, client);
   }

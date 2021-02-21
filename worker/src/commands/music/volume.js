@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'volume',
+      aliases: ['v', 'vol'],
       interaction: true
     }, client);
   }

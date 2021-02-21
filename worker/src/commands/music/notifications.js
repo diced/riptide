@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'notifications',
+      aliases: ['n', 'notifs'],
       interaction: true
     }, client);
   }

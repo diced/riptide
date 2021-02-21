@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'stop',
+      aliases: ['leave', 'disconnect'],
       interaction: true
     }, client);
   }

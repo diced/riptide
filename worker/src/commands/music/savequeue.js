@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'savequeue',
+      aliases: ['sq', 's', 'save'],
       interaction: true
     }, client);
   }

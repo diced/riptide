@@ -5,6 +5,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'play',
+      aliases: ['p'],
       interaction: true
     }, client);
   }

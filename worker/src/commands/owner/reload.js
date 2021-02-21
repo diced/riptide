@@ -1,10 +1,10 @@
 const Command = require('../../structures/Command');
-const Handler = require('../../structures/Handler');
 
 module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'reload',
+      aliases: ['r'],
       devOnly: true
     }, client);
   }
