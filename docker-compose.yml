@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      lavalink:
+        condition: service_started
+      gateway:
+        condition: service_started
+
+  redis:
+    image: eqalpha/keydb
+    restart: unless-stopped
+    command: ["keydb-server", "--appendonly", "yes", "--protected-mode", "no"]
+    volumes:
+      - "redis_data:/data"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 10s
+      timeout: 5s
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=riptide
+      - POSTGRES_PASSWORD=riptide
+      - POSTGRES_DATABASE=riptide
+    volumes:
+      - "/var/lib/postgresql/data:/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U riptide"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  lavalink:
+    build:
+      context: .
+      dockerfile: docker/lavalink/Dockerfile
+    restart: unless-stopped
+
+  gateway:
+    build:
+      dockerfile: docker/gateway/Dockerfile
+      context: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis_data:
