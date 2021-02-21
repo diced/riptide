@@ -10,22 +10,18 @@ module.exports = class extends Command {
   }
 
   async exec(ctx, args) {
-    const options = {
-      commands: args.flag('commands') || args.flag('c') || false,
-      events: args.flag('events') || args.flag('e') || false,
-      all: args.flag('all') || args.flag('a') || true
-    };
-
-    this.client.handler = new Handler(this.client);
-
     try {
-      if (options.all) await Promise.all([this.client.handler.loadCommands(true), this.client.handler.loadEvents(true)]);
-      else if (options.commands) await this.client.handler.loadCommands(true);
-      else if (options.events) await this.client.handler.loadEvents(true);
-
-      if (options.all) return ctx.reply({ content: 'Reloaded everything.' });
-      if (options.commands) return ctx.reply({ content: 'Reloaded commands.' });
-      if (options.events) return ctx.reply({ content: 'Reloaded events.' });
+      if (args.flag('c')) {
+        await this.client.handler.loadCommands(true);
+        return ctx.reply({ content: 'Reloaded commands.' });
+      } else if (args.flag('e')) {
+        await this.client.handler.loadEvents(true);
+        return ctx.reply({ content: 'Reloaded events.' });
+      } else {
+        await this.client.handler.loadCommands(true);
+        await this.client.handler.loadEvents(true);
+        return ctx.reply({ content: 'Reloaded everything.' });
+      }
     }
     catch (err) {
       return ctx.reply({

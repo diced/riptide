@@ -1,0 +1,10 @@
+token = "token"
+redis = "redis://redis"
+
+[database]
+url = "postgres://riptide:riptide@postgres/riptide"
+
+[lavalink.main]
+host = "lavalink"
+password = "youshallnotpass"
+port = 2333

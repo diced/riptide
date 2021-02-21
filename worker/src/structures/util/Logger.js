@@ -10,7 +10,7 @@ class LogFormatter extends Formatter {
 
   formatMessage(meta, message) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss:SSS');
-    return `[${time} ${this.formatLevel(meta.level)}  ${chalk.blue(meta.origin.packagePath.slice(4))}${chalk.greenBright(meta.origin.name)}]   ${message}`;
+    return `[${time} ${this.formatLevel(meta.level)}  ${chalk.blue(meta.origin.packagePath.slice(4))}${chalk.greenBright(meta.origin.name)}] ${message}`;
   }
 
   formatLevel(level) {

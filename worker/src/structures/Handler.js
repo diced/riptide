@@ -15,7 +15,7 @@ class Handler {
     const files = await Handler.walk('./src/commands');
 
     for (const file of files) {
-      if (reload) (delete require.cache[require.resolve(file)]);
+      if (reload) delete require.cache[require.resolve(file)];
       let cmd = new (require(file))(this.client);
 
       for (const alias of cmd.aliases) this.aliases.set(alias, cmd.name);
@@ -29,11 +29,14 @@ class Handler {
     const files = await Handler.walk('./src/events');
 
     for (const file of files) {
-      if (reload) (delete require.cache[require.resolve(file)]);
+      if (reload) delete require.cache[require.resolve(file)];
       let event = new (require(file))(this.client);
       this.events.set(event.name, event);
+
+      this.client.removeListener(event.name.toUpperCase());
       this.client.on(event.name.toUpperCase(), (...args) => event.exec(...args));
     }
+
     this.logger.info(`Loaded ${this.events.size} events`);
   }
 

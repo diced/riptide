@@ -9,9 +9,8 @@ class Context {
   async send(data, ignore = false) {
     if (this.interaction) {
       if (ignore) return this.client.rest.post(`/channels/${this.msg.channel_id}/messages`, { ...data, 'allowed_mentions': { 'parse': [] } }); // interaction but ignored
-      return this.client.rest.post(`/interactions/${this.msg.id}/${this.msg.token}/callback`, { type: 4, data  }); // interaction but not ignored
-    }
-    return this.client.rest.post(`/channels/${this.msg.channel_id}/messages`, { ...data, 'allowed_mentions': { 'parse': [] } }); // no interaction.
+      else return this.client.rest.post(`/interactions/${this.msg.id}/${this.msg.token}/callback`, { type: 4, data  }); // interaction but not ignored
+    } else return this.client.rest.post(`/channels/${this.msg.channel_id}/messages`, { ...data, 'allowed_mentions': { 'parse': [] } }); // no interaction.
   }
 
   async embed(embed) {
