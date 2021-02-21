@@ -49,6 +49,7 @@ class Client extends EventEmitter {
       entities: [
         new EntitySchema(require('../entities/User'))
       ],
+      synchronize: true,
       ...this.config.database
     });
 
