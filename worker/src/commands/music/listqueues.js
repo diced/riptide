@@ -12,6 +12,6 @@ module.exports = class extends Command {
   async exec(ctx) {
     const saved = Object.keys((await this.client.util.user(ctx.user.id)).saved);
     if (!saved.length) return ctx.send({ content: 'You don\'t have any saved queues.' });
-    return ctx.send({ content: `Queues: ${saved.map(x=>`\`${x}\``).join(', ')}` })
+    return ctx.send({ content: `Queues: ${saved.map(x=>`\`${x}\``).join(', ')}` });
   }
 };

@@ -27,12 +27,10 @@ module.exports = class extends Command {
       const [,dur] = process.hrtime(start);
 
       const evaluation = inspect(evaled, { depth: Number(args.option('depth')) || 0 });
-      // if (evaluation.length >= 1950) {
-      //     const bin = await this.client.util.bin(evaluation);
-      //     return ctx.send({
-      //         content: bin
-      //     });
-      // }
+      if (evaluation.length >= 1950) {
+        const bin = await this.client.util.bin(evaluation);
+        return ctx.send({ content: bin });
+      }
       return ctx.reply({
         content: `**Input:** \`\`\`js\n${input}\`\`\`\n**Output:** \`\`\`js\n${evaluation}\`\`\`${args.flag('v') ? `\n${(dur/10000).toFixed(0)}μs` : ''}`
       });

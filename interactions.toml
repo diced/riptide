@@ -1,0 +1,49 @@
+[[commands]]
+name = "play"
+description = "Play tracks from various sources"
+options = [ { type = 3, name = "query", description = "Search term/link", required = true } ]
+
+[[commands]]
+name = "skip"
+description = "Skip the current track"
+
+[[commands]]
+name = "queue"
+description = "View the current queue"
+options = [ { type = 4, name = "page", description = "Page number (defaults to 1)" } ]
+
+[[commands]]
+name = "stop"
+description = "Stop the player & leave the current Voice Channel"
+
+[[commands]]
+name = "volume"
+description = "Change the volume"
+options = [ { type = 4, name = "volume", description = "Volume amount" } ]
+
+[[commands]]
+name = "notifications"
+description = "Enable playing notifications"
+
+[[commands]]
+name = "np"
+description = "Check what's currently playing"
+
+[[commands]]
+name = "loop"
+description = "Select the loop mode"
+options = [ { type = 3, name = "mode", description = "Loop mode", required = true, choices = [ { name = "Single", value = "s" }, { name = "Queue", value = "q" }, { name = "None", value = "n" } ] } ]
+
+[[commands]]
+name = "save"
+description = "Save the current queue"
+options = [ { type = 3, name = "name", description = "Queue name", required = true } ]
+
+[[commands]]
+name = "load"
+description = "Load a saved queue"
+options = [ { type = 3, name = "name", description = "Queue name", required = true } ]
+
+[[commands]]
+name = "list"
+description = "List your saved queues"
