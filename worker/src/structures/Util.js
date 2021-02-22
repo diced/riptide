@@ -11,7 +11,7 @@ class Util {
 
   async user(id) {
     const existing = await this.client.pg.user.findOne({ where: { id } });
-    return existing ?? this.client.pg.users.save({ id });
+    return existing ?? this.client.pg.user.save({ id });
   }
 
   async sleep(ms) {
