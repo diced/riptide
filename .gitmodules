@@ -1,3 +1,0 @@
-[submodule "gateway/pylon-gateway-protobuf"]
-	path = gateway/pylon-gateway-protobuf
-	url = https://github.com/pylonbot/pylon-gateway-protobuf
