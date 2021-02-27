@@ -22,8 +22,8 @@ class Context {
   }
 
   async voiceState() {
-    const existing = await this.client.redis.hget('voice_state', `${this.msg.guild_id}:${this.user.id}`);
-    return JSON.parse(existing) ?? null;
+    const existing = await this.client.grpc.asyncService.getGuildMemberVoiceState({ user_id: this.user.id, guild_id: this.msg.guild_id });
+    return existing.voice_state_data;
   }
 
   async player(create = true) {

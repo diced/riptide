@@ -1,12 +1,15 @@
 const Redis = require('ioredis');
-const QueuePlugin = require('./util/QueuePlugin');
-const Handler = require('./Handler');
-const Util = require('./Util');
 const { createConnection, EntitySchema } = require('typeorm');
 const { Logger } = require('@ayana/logger');
 const { EventEmitter } = require('eventemitter3');
 const { Rest } = require('@spectacles/rest');
 const { Manager } = require('lavaclient');
+const { loadPackageDefinition, credentials } = require('@grpc/grpc-js');
+const { loadSync } = require('@grpc/proto-loader');
+
+const QueuePlugin = require('./util/QueuePlugin');
+const Handler = require('./Handler');
+const Util = require('./Util');
 
 class Client extends EventEmitter {
   constructor(options = { receiveEvents: true, config: null }) {
@@ -28,6 +31,7 @@ class Client extends EventEmitter {
     this.rest = new Rest(this.config.token);
     this.pg = null;
     this.logger = Logger.get(Client);
+    this.grpc = null;
 
     this.manager = new Manager(Object.keys(this.config.lavalink).map(id=>({id,...this.config.lavalink[id]})), {
       send: (guild, payload) => this.redis.rpush('gateway:dispatch', JSON.stringify(payload)),
@@ -52,6 +56,36 @@ class Client extends EventEmitter {
       synchronize: true,
       ...this.config.database
     });
+
+    const packageDefinition = loadPackageDefinition(loadSync(
+      'gateway/v1/cache_service.proto',
+      {
+        keepCase: true,
+        includeDirs: ['../gateway/pylon-gateway-protobuf'],
+        longs: String,
+        enums: String,
+        defaults: true,
+        oneofs: true
+      }));
+
+    const service = new packageDefinition.pylon.gateway.v1.service.GatewayCache('localhost:50051', credentials.createInsecure());
+    const asyncService = {};
+
+    for (const b of Object.keys(Object.getPrototypeOf(service))) {
+      asyncService[b] = (data) => new Promise((res, rej) => {
+        service[b](data, (err, d) => {
+          if (err) rej(err);
+
+          res(d);
+        });
+      });
+    }
+
+    this.grpc = {
+      packageDefinition,
+      service,
+      asyncService,
+    };
 
     this.pg = {
       user: connection.getRepository('User'),

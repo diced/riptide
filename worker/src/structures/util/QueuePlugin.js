@@ -37,7 +37,7 @@ class QueuePlugin extends Plugin {
             }
           } else {
             try {
-              await this.connect(state.channel_id, {selfDeaf: true});
+              await this.connect(state.channel_id.value, {selfDeaf: true});
             } catch (e) {
               return ctx.send({ content: 'Couldn\'t join the vc.' });
             }

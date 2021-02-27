@@ -10,9 +10,11 @@ edition = "2018"
 # discord
 twilight-gateway = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
 twilight-model = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
+twilight-cache-inmemory = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
 
 
 tonic = { version = "0.4.0", features = ["tls"] }
+prost-types = "0.7"
 prost = "0.7"
 
 # serde
@@ -28,3 +30,6 @@ toml = "0.5.8"
 futures = "0.3.12"
 tokio = { version = "1", features = ["full"] }
 redis = { version = "0.17.0", features = ["tokio-comp"] }
+
+[build-dependencies]
+tonic-build = { version = "0.4.0", features = ["prost"] }
