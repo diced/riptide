@@ -6,6 +6,8 @@ const { Rest } = require('@spectacles/rest');
 const { Manager } = require('lavaclient');
 const { loadPackageDefinition, credentials } = require('@grpc/grpc-js');
 const { loadSync } = require('@grpc/proto-loader');
+const { existsSync } = require('fs');
+const { join } = require('path');
 
 const QueuePlugin = require('./util/QueuePlugin');
 const Handler = require('./Handler');
@@ -57,11 +59,12 @@ class Client extends EventEmitter {
       ...this.config.database
     });
 
+    const path = existsSync('protobuf') ? './protobuf' : '../protobuf';
     const packageDefinition = loadPackageDefinition(loadSync(
-      'gateway/v1/cache_service.proto',
+      join(path, 'gateway', 'v1', 'cache_service.proto'),
       {
         keepCase: true,
-        includeDirs: ['../gateway/pylon-gateway-protobuf'],
+        includeDirs: [path],
         longs: String,
         enums: String,
         defaults: true,
@@ -75,7 +78,6 @@ class Client extends EventEmitter {
       asyncService[b] = (data) => new Promise((res, rej) => {
         service[b](data, (err, d) => {
           if (err) rej(err);
-
           res(d);
         });
       });
@@ -84,7 +86,7 @@ class Client extends EventEmitter {
     this.grpc = {
       packageDefinition,
       service,
-      asyncService,
+      asyncService
     };
 
     this.pg = {
