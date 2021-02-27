@@ -27,6 +27,7 @@ RUN source $HOME/.cargo/env && \
 
 WORKDIR /opt/gateway
 
+COPY protobuf ./protobuf
 COPY gateway/Cargo.lock ./Cargo.lock
 COPY gateway/Cargo.toml ./Cargo.toml
 COPY config.toml ./config.toml

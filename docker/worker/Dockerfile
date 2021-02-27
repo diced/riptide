@@ -4,6 +4,8 @@ RUN apk add git python g++ make pkgconf cairo-dev jpeg-dev pango-dev giflib-dev 
 RUN ln -sf pkgconf /usr/bin/pkg-config
 
 WORKDIR /opt/worker
+
+COPY protobuf ./protobuf
 COPY worker/. .
 COPY config.toml .
 
