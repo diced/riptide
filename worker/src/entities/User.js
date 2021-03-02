@@ -7,8 +7,8 @@ module.exports = {
       primary: true,
       type: 'text'
     },
-    saved: {
-      name: 'saved',
+    queues: {
+      name: 'queues',
       type: 'jsonb',
       default: {}
     }

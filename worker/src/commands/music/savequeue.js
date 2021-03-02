@@ -22,7 +22,7 @@ module.exports = class extends Command {
     if (!player.queue.length) return ctx.send({ content: 'No songs in current queue.' });
 
     const user = await this.client.util.user(ctx.user.id);
-    user.saved[queue] = player.queue;
+    user.queues[queue] = player.queue;
 
     await this.client.pg.user.save(user);
     return ctx.send({ content: `Saved queue to **${queue}**` });
