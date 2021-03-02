@@ -1,7 +1,7 @@
 const { Lexer, extractCommand, Parser, prefixedStrategy, Args } = require('lexure');
 const Event = require('../structures/Event');
 const Context = require('../structures/Context');
-const {Logger} = require('@ayana/logger');
+const { Logger } = require('@ayana/logger');
 
 module.exports = class extends Event {
   constructor(client) {

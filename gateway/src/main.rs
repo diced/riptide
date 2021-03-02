@@ -1,14 +1,11 @@
 use futures::StreamExt;
-use gateway::{
-  protobuf::{
-    discord::v1::{
-      cache::{GetGuildMemberVoiceStateRequest, GetGuildMemberVoiceStateResponse},
-      model::{SnowflakeValue, VoiceStateData},
-    },
-    gateway::v1::service::gateway_cache_server::{GatewayCache, GatewayCacheServer},
+use gateway::{protobuf::{
+  discord::v1::{
+    cache::{GetGuildMemberVoiceStateRequest, GetGuildMemberVoiceStateResponse},
+    model::{SnowflakeValue, VoiceStateData},
   },
-  Result, push_event
-};
+  gateway::v1::service::gateway_cache_server::{GatewayCache, GatewayCacheServer},
+}, Result, push_event};
 use log::info;
 use redis::AsyncCommands;
 use serde_json::{from_str, Value};
@@ -83,6 +80,7 @@ async fn main() -> Result<()> {
   let cache = InMemoryCache::builder().build();
   let client = redis::Client::open(config.redis)?;
   let red = Arc::new(Mutex::new(client.get_async_connection().await?));
+
   let mut blocker = client.get_async_connection().await?;
 
   let c = cluster.clone();

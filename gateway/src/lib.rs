@@ -7,6 +7,7 @@ use serde_json::to_string;
 use std::{error::Error, fs::read_to_string, sync::Arc};
 use tokio::{sync::Mutex, time::Instant};
 use toml::from_str;
+use twilight_gateway::Event;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 

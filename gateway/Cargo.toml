@@ -8,10 +8,9 @@ edition = "2018"
 
 [dependencies]
 # discord
-twilight-gateway = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
+twilight-gateway = { git = "https://github.com/Erk-/twilight", branch = "feature/slash", features = ["metrics"] }
 twilight-model = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
 twilight-cache-inmemory = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
-
 
 tonic = { version = "0.4.0", features = ["tls"] }
 prost-types = "0.7"
