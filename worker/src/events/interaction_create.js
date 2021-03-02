@@ -40,7 +40,7 @@ module.exports = class extends Event {
       command.exec(ctx, args);
     } catch (e) {
       Logger.get('interaction_create').error(e);
-      return ctx.send({ content: `Error: \`${e.message}\`` });
+      // return ctx.send({ content: `Error: \`${e.message}\`` });
     }
   }
 };

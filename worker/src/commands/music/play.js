@@ -13,6 +13,11 @@ module.exports = class extends Command {
   async exec(ctx, args) {
     const player = await ctx.player();
 
-    await player.prompt(ctx, joinTokens(args.many()));
+    try {
+      await player.prompt(ctx, joinTokens(args.many()));
+    } catch (e) {
+      if (e.code && e.code === 'ECONNREFUSED') ctx.send({ content: 'Lavalink connection refused...' });
+      else ctx.send({ content: `Error: ${e.message}` });
+    }
   }
 };
