@@ -18,10 +18,12 @@ Logger.disableDefaultTransport();
 })();
 
 
-Object.defineProperty(Array.prototype, 'chunk', {
-  value: function(s) {
-    const a = [];
-    for (let i = 0; i < this.length; i += s) a.push(this.slice(i, i + s));
-    return a;
-  }
-});
+Array.prototype.chunk = function (s) {
+  const a = [];
+  for (let i = 0; i < this.length; i += s) a.push(this.slice(i, i + s));
+  return a;
+};
+
+String.prototype.toTitleCase =  function () {
+  return this.split(' ').map(s => s.charAt(0).toUpperCase() + s.substr(1).toLowerCase()).join(' ');
+};

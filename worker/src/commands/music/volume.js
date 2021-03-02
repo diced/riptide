@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'volume',
       aliases: ['v', 'vol'],
+      description: 'Set the volume of the player',
       interaction: true
     }, client);
   }

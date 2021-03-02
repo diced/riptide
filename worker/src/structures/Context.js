@@ -1,5 +1,5 @@
 class Context {
-  constructor(client, msg, interaction) {
+  constructor(client, msg, interaction = false) {
     this.client = client;
     this.msg = msg;
     this.interaction = interaction;

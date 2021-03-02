@@ -1,6 +1,6 @@
 const { Logger } = require('@ayana/logger');
-const { extname, resolve } = require('path');
-const { promises } = require('fs');
+const { extname, resolve, dirname, basename } = require('path');
+const { promises, readdirSync } = require('fs');
 
 class Handler {
   constructor(client) {
@@ -8,6 +8,7 @@ class Handler {
     this.commands = new Map();
     this.aliases = new Map();
     this.events = new Map();
+    this.categories = readdirSync('./src/commands');
     this.logger = Logger.get(Handler);
   }
 
@@ -16,8 +17,8 @@ class Handler {
 
     for (const file of files) {
       if (reload) delete require.cache[require.resolve(file)];
-      let cmd = new (require(file))(this.client);
-
+      const cmd = new (require(file))(this.client);
+      cmd.category = basename(dirname(file));
       for (const alias of cmd.aliases) this.aliases.set(alias, cmd.name);
 
       this.commands.set(cmd.name, cmd);

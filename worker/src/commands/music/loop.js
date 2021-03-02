@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'loop',
+      description: 'Set the current loop mode',
       interaction: true
     }, client);
   }

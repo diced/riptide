@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'listqueues',
       aliases: ['list'],
+      description: 'List all of your saved queues',
       interaction: true
     }, client);
   }

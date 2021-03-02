@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'stop',
       aliases: ['leave', 'disconnect'],
+      description: 'Stop/leave the current voice channel',
       interaction: true
     }, client);
   }

@@ -27,15 +27,15 @@ class QueuePlugin extends Plugin {
 
           const track = res.tracks[0];
           if (this.playing) {
-            if (res.loadType === 'PLAYLIST_LOADED') this.queue.push(...res.tracks) else this.queue.push(track);
+            if (res.loadType === 'PLAYLIST_LOADED') this.queue.push(...res.tracks); else this.queue.push(track);
 
-            ctx.send({ content: `Added ${res.loadType === 'PLAYLIST_LOADED' ? `playlist **${res.playlistInfo.name}**` : `**${track.info.name}**`}` });
+            ctx.send({ content: `Added ${res.loadType === 'PLAYLIST_LOADED' ? `playlist **${res.playlistInfo.name}**` : `**${track.info.title}**`}` });
           } else {
             await this.connect(state.channel_id.value, {selfDeaf: true});
 
             if (res.loadType === 'PLAYLIST_LOADED') this.queue.push(...res.tracks); else this.queue.push(track);
 
-            ctx.send({ content: `Playing ${res.loadType === 'PLAYLIST_LOADED' ? `playlist **${res.playlistInfo.name}**` : `**${track.info.name}**`}` });
+            ctx.send({ content: `Playing ${res.loadType === 'PLAYLIST_LOADED' ? `playlist **${res.playlistInfo.name}**` : `**${track.info.title}**`}` });
             await this.startPlaying(ctx, track);
           }
         }

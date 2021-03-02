@@ -6,6 +6,7 @@ module.exports = class extends Command {
     super({
       name: 'play',
       aliases: ['p'],
+      description: 'Play a song from youtube or other various sources',
       interaction: true
     }, client);
   }

@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'queue',
       aliases: ['q'],
+      description: 'View the players queue',
       interaction: true
     }, client);
   }

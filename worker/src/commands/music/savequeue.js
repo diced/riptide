@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'savequeue',
       aliases: ['sq', 's', 'save'],
+      description: 'Save the current queue',
       interaction: true
     }, client);
   }

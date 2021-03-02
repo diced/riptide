@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'notifications',
       aliases: ['n', 'notifs'],
+      description: 'Enable player notifications',
       interaction: true
     }, client);
   }

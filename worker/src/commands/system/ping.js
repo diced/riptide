@@ -1,9 +1,10 @@
-const Command = require('../structures/Command');
+const Command = require('../../structures/Command');
 
 module.exports = class extends Command {
   constructor(client) {
     super({
-      name: 'ping'
+      name: 'ping',
+      description: 'Get the latency between discord and the bot'
     }, client);
   }
 

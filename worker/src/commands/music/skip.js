@@ -4,6 +4,7 @@ module.exports = class extends Command {
   constructor(client) {
     super({
       name: 'skip',
+      description: 'Skip the current song',
       interaction: true
     }, client);
   }

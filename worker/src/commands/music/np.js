@@ -7,6 +7,7 @@ module.exports = class extends Command {
     super({
       name: 'np',
       aliases: ['nowplaying'],
+      description: 'See what\'s playing currently',
       interaction: true
     }, client);
   }

@@ -5,6 +5,7 @@ module.exports = class extends Command {
     super({
       name: 'loadqueue',
       aliases: ['lq', 'load', 'l'],
+      description: 'Load a saved queue',
       interaction: true
     }, client);
   }
