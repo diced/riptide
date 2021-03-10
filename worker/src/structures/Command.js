@@ -9,6 +9,18 @@ class Command {
     this.interaction = options.interaction || false;
     this.client = client;
   }
+
+  toObject() {
+    return {
+      name: this.name,
+      description: this.description,
+      category: this.category,
+      aliases: this.aliases,
+      usage: this.usage,
+      devOnly: this.devOnly,
+      interaction: this.interaction
+    };
+  }
 }
 
 module.exports = Command;

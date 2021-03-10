@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "riptide: gateway",
+      "type": "shell",
+      "options": {
+        "cwd": "gateway",
+        "env": {
+          "RUST_LOG": "debug"
+        }
+      },
+      "command": "cargo",
+      "args": [
+        "run",
+        "--bin",
+        "gateway"
+      ]
+    },
+    {
+      "label": "riptide: worker",
+      "type": "shell",
+      "options": {
+        "cwd": "worker"
+      },
+      "command": "node",
+      "args": [
+        "src"
+      ]
+    },
+    {
+      "label": "riptide: dashboard dev",
+      "type": "shell",
+      "options": {
+        "cwd": "dashboard"
+      },
+      "command": "yarn",
+      "args": [
+        "dev"
+      ]
+    }
+  ]
+}

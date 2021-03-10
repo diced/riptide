@@ -8,6 +8,7 @@ class Handler {
     this.commands = new Map();
     this.aliases = new Map();
     this.events = new Map();
+    this.routes = new Map();
     this.categories = readdirSync('./src/commands');
     this.logger = Logger.get(Handler);
   }
@@ -36,6 +37,20 @@ class Handler {
 
       this.client.removeListener(event.name.toUpperCase());
       this.client.on(event.name.toUpperCase(), (...args) => event.exec(...args));
+    }
+
+    this.logger.info(`Loaded ${this.events.size} events`);
+  }
+
+  async loadRoutes() {
+    const files = await Handler.walk('./src/routes');
+
+    for (const file of files) {
+      let route = new (require(file))(this.client);
+      this.routes.set(route.name, route);
+
+      if (route.websocket) this.client.api.get(route.url, { websocket: true }, (conn,res) => route.exec(conn, res));
+      else this.client.api.route(route.build());
     }
 
     this.logger.info(`Loaded ${this.events.size} events`);

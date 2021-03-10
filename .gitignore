@@ -2,3 +2,5 @@ target
 node_modules
 config.toml
 config.prod.toml
+.next
+env.local

@@ -8,6 +8,7 @@ const { loadPackageDefinition, credentials } = require('@grpc/grpc-js');
 const { loadSync } = require('@grpc/proto-loader');
 const { existsSync } = require('fs');
 const { join } = require('path');
+const fastify = require('fastify');
 
 const QueuePlugin = require('./util/QueuePlugin');
 const Handler = require('./Handler');
@@ -31,9 +32,10 @@ class Client extends EventEmitter {
     this.handler = new Handler(this);
     this.util = new Util(this);
     this.rest = new Rest(this.config.token);
-    this.pg = null;
-    this.logger = Logger.get(Client);
     this.grpc = null;
+    this.pg = null;
+    this.api = fastify();
+    this.logger = Logger.get(Client);
 
     this.manager = new Manager(Object.keys(this.config.lavalink).map(id=>({id,...this.config.lavalink[id]})), {
       send: (guild, payload) => this.redis.rpush('gateway:dispatch', JSON.stringify(payload)),
@@ -44,10 +46,16 @@ class Client extends EventEmitter {
   }
 
   async start() {
+    this.api.register(require('fastify-cors'), {
+      origin: [ 'http://localhost:3000', 'https://riptide.diced.wtf' ]
+    });
+    this.api.register(require('fastify-websocket'));
+
     await Promise.all([
       this.handler.loadEvents(),
-      this.handler.loadCommands()
-    ]).then(() => this.logger.info('Loaded events & commands'));
+      this.handler.loadCommands(),
+      this.handler.loadRoutes()
+    ]).then(() => this.logger.info('Loaded routes, events & commands'));
 
     const connection = await createConnection({
       type: 'postgres',
@@ -93,8 +101,9 @@ class Client extends EventEmitter {
       user: connection.getRepository('User'),
       connection
     };
-
-    await this.manager.init('619350788631953418');
+    
+    this.api.listen(50642, () => this.logger.info('Listening on ::50642'));
+    await this.manager.init(this.config.id);
     await Promise.all([
       this.event('message_create'),
       this.event('interaction_create'),
