@@ -150,11 +150,7 @@ class Client extends EventEmitter {
       this.event('voice_server_update')
     ]);
   }
-
-  /**
-   * Start event ticker
-   * @param {string} event 
-   */
+  
   async event(event) {
     const redis = await this.redis.duplicate();
     while (this.options.receiveEvents) {

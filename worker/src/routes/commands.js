@@ -8,7 +8,11 @@ module.exports = class extends Route {
     }, client);
   }
 
-  async exec(res, reply) {
+  /**
+   * @param {import('fastify').FastifyRequest} req
+   * @param {import('fastify').FastifyReply} reply
+   */
+  async exec(req, reply) {
     const commands = [];
     for (const [, command] of this.client.handler.commands) commands.push([ command.name, command.toObject() ]);
     return reply.send(commands);

@@ -1,5 +1,4 @@
-const { Args, args } = require('lexure');
-const Client = require('../../structures/Client');
+const { Args } = require('lexure');
 const Command = require('../../structures/Command');
 const Context = require('../../structures/Context');
 

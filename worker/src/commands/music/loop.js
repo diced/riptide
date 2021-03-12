@@ -1,4 +1,6 @@
+const { Args } = require('lexure');
 const Command = require('../../structures/Command');
+const Context = require('../../structures/Context');
 
 module.exports = class extends Command {
   constructor(client) {
@@ -8,7 +10,7 @@ module.exports = class extends Command {
       interaction: true
     }, client);
   }
-  
+
   /**
    * @param {Context} ctx
    * @param {Args?} args

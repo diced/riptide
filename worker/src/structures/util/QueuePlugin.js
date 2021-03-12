@@ -8,10 +8,29 @@ class QueuePlugin extends Plugin {
         constructor(socket, data) {
           super(socket, data);
 
+          /**
+           * @type {number} current
+           */
           this.current = 0;
+
+          /**
+           * @type {string} loop
+           */
           this.loop = 'none';
+
+          /**
+           * @type {boolean} notifications
+           */
           this.notifications = true;
+
+          /**
+           * @type {import('@lavaclient/types').Track[]} queue
+           */
           this.queue = [];
+
+          /**
+           * @type {Logger} logger
+           */
           this.logger = Logger.get(QueuePlayer);
 
           this.logger.info(`created player for ${this.guild}`);

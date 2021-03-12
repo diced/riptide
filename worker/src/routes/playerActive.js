@@ -7,7 +7,11 @@ module.exports = class extends Route {
       url: '/api/player-active/:id'
     }, client);
   }
-
+  
+  /**
+   * @param {import('fastify').FastifyRequest} req
+   * @param {import('fastify').FastifyReply} reply
+   */
   async exec(req, reply) {
     return reply.send(this.client.manager.players.has(req.params.id));
   }

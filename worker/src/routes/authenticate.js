@@ -19,6 +19,10 @@ module.exports = class extends Route {
     }, client);
   }
 
+  /**
+   * @param {import('fastify').FastifyRequest} req
+   * @param {import('fastify').FastifyReply} reply
+   */
   async exec(req, reply) {
     const tokens = await fetch('https://discord.com/api/v8/oauth2/token', 'POST')
       .header('Content-Type', 'application/x-www-form-urlencoded')

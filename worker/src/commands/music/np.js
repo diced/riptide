@@ -1,4 +1,6 @@
+const { Args } = require('lexure');
 const Command = require('../../structures/Command');
+const Context = require('../../structures/Context');
 const moment = require('moment');
 require('moment-duration-format');
 

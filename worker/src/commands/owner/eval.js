@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
-const { joinTokens } = require('lexure');
+const { joinTokens, Args } = require('lexure');
 const { inspect } = require('util');
+const Context = require('../../structures/Context');
 
 module.exports = class extends Command {
   constructor(client) {

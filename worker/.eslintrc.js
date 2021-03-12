@@ -8,6 +8,9 @@ module.exports = {
   'parserOptions': {
     'ecmaVersion': 12
   },
+  plugins: [
+    'jsdoc'
+  ],
   'rules': {
     'indent': [
       'error',
@@ -25,6 +28,7 @@ module.exports = {
       'error',
       'always'
     ],
-    'comma-dangle': ['error', 'never']
+    'comma-dangle': ['error', 'never'],
+    'jsdoc/no-undefined-types': 1
   }
 };

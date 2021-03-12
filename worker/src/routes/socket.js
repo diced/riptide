@@ -8,7 +8,11 @@ module.exports = class extends Route {
       websocket: true
     }, client);
   }
-
+  
+  /**
+   * @param {*} conn
+   * @param {import('fastify').FastifyRequest} req
+   */
   async exec(conn, req) {
     conn.socket.guild_id = req.query.guild_id;
     conn.socket.on('message', msg => {

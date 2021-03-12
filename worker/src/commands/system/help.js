@@ -1,4 +1,6 @@
+const { Args } = require('lexure');
 const Command = require('../../structures/Command');
+const Context = require('../../structures/Context');
 
 module.exports = class extends Command {
   constructor(client) {
