@@ -27,6 +27,8 @@
     "typeorm": "^0.2.31"
   },
   "devDependencies": {
-    "eslint": "^7.20.0"
+    "@lavaclient/types": "^1.0.4",
+    "eslint": "^7.20.0",
+    "eslint-plugin-jsdoc": "^32.2.0"
   }
 }
