@@ -8,7 +8,11 @@ module.exports = class extends Command {
       devOnly: true
     }, client);
   }
-
+  
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx, args) {
     try {
       if (args.flag('c')) {

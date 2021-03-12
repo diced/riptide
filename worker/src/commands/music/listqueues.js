@@ -1,4 +1,7 @@
+const { Args, args } = require('lexure');
+const Client = require('../../structures/Client');
 const Command = require('../../structures/Command');
+const Context = require('../../structures/Context');
 
 module.exports = class extends Command {
   constructor(client) {
@@ -10,6 +13,10 @@ module.exports = class extends Command {
     }, client);
   }
 
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx) {
     const saved = Object.keys((await this.client.util.user(ctx.user.id)).queues);
     if (!saved.length) return ctx.send({ content: 'You don\'t have any saved queues.' });

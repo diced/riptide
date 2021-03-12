@@ -8,7 +8,11 @@ module.exports = class extends Command {
       interaction: true
     }, client);
   }
-
+  
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx, args) {
     const state = await ctx.voiceState();
     if (!state) return ctx.send({ content: 'Please join a voice channel.' });

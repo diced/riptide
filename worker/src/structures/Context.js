@@ -1,4 +1,12 @@
+const Client = require('./Client');
+
 class Context {
+  /**
+   * Context
+   * @param {Client} client 
+   * @param {import('discord-api-types').APIMessage} msg 
+   * @param {boolean} interaction 
+   */
   constructor(client, msg, interaction = false) {
     this.client = client;
     this.msg = msg;

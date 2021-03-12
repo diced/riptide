@@ -10,7 +10,11 @@ module.exports = class extends Command {
       interaction: true
     }, client);
   }
-
+  
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx, args) {
     const player = await ctx.player();
 

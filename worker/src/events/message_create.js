@@ -10,6 +10,9 @@ module.exports = class extends Event {
     }, client);
   }
 
+  /**
+   * @param {import('discord-api-types').APIMessage} msg
+   */
   async exec(msg) {
     if (!msg.guild_id || msg.author.id === '619350788631953418') return;
     const prefix = 'r';

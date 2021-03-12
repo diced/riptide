@@ -7,7 +7,11 @@ module.exports = class extends Command {
       description: 'Get the latency between discord and the bot'
     }, client);
   }
-
+  
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx) {
     const m = await ctx.send({ content: '???' });
     return this.client.util.editMessage(ctx.msg.channel_id, m.id, {

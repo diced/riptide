@@ -10,6 +10,9 @@ module.exports = class extends Event {
     }, client);
   }
 
+  /**
+   * @param {import('discord-api-types').APIInteraction} msg
+   */
   async exec(msg) {
     if (!msg.guild_id) return;
     const interactionToCmd = `r${msg.command_data.name} ${msg.command_data.options.map(v=>v.value).join(' ')}`;

@@ -14,6 +14,7 @@ const QueuePlugin = require('./util/QueuePlugin');
 const Handler = require('./Handler');
 const Util = require('./Util');
 
+
 class Client extends EventEmitter {
   constructor(options = { receiveEvents: true, config: null }) {
     super();
@@ -27,16 +28,54 @@ class Client extends EventEmitter {
       writable: false
     });
 
+    /**
+     * Client Options
+     * @type {*} options
+     */
     this.options = options;
+    
+    /**
+     * Redis
+     * @type {Redis} redis
+     */
     this.redis = new Redis(this.config.redis);
+
+    /**
+     * Handler
+     * @type {Handler} handler
+     */
     this.handler = new Handler(this);
+
+    /**
+     * Util
+     * @type {Util}
+     */
     this.util = new Util(this);
+
+    /**
+     * Rest
+     * @type {Rest}
+     */
     this.rest = new Rest(this.config.token);
     this.grpc = null;
     this.pg = null;
+
+    /**
+     * Fastify instance
+     * @type {import('fastify').FastifyInstance} api
+     */
     this.api = fastify();
+
+    /**
+     * Logger
+     * @type {Logger} logger
+     */
     this.logger = Logger.get(Client);
 
+    /**
+     * Lavalink manager
+     * @type {Manager}
+     */
     this.manager = new Manager(Object.keys(this.config.lavalink).map(id=>({id,...this.config.lavalink[id]})), {
       send: (guild, payload) => this.redis.rpush('gateway:dispatch', JSON.stringify(payload)),
       plugins: [new QueuePlugin()]
@@ -112,6 +151,10 @@ class Client extends EventEmitter {
     ]);
   }
 
+  /**
+   * Start event ticker
+   * @param {string} event 
+   */
   async event(event) {
     const redis = await this.redis.duplicate();
     while (this.options.receiveEvents) {

@@ -8,7 +8,11 @@ module.exports = class extends Command {
       interaction: true
     }, client);
   }
-
+  
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx, args) {
     const embed = {
       title: `Help (${this.client.handler.commands.size})`,

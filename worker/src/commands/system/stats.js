@@ -7,7 +7,11 @@ module.exports = class extends Command {
       description: 'Get the stats of the bot'
     }, client);
   }
-
+  
+  /**
+   * @param {Context} ctx
+   * @param {Args?} args
+   */
   async exec(ctx) {
     const memory = process.memoryUsage();
 

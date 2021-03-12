@@ -1,8 +1,13 @@
 const { Logger } = require('@ayana/logger');
 const { extname, resolve, dirname, basename } = require('path');
 const { promises, readdirSync } = require('fs');
+const Client = require('./Client');
 
 class Handler {
+  /**
+   * 
+   * @param {Client} client 
+   */
   constructor(client) {
     this.client = client;
     this.commands = new Map();
