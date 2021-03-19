@@ -6,6 +6,9 @@ pub mod discord {
     pub mod cache {
       tonic::include_proto!("pylon.discord.v1.cache");
     }
+    pub mod event {
+      tonic::include_proto!("pylon.discord.v1.event");
+    }
   }
 }
 

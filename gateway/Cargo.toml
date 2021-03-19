@@ -15,7 +15,7 @@ twilight-cache-inmemory = { git = "https://github.com/Erk-/twilight", branch = "
 jemallocator = "0.3.0"
 jemalloc-ctl = "0.3.3"
 
-tonic = { version = "0.4.0", features = ["tls"] }
+tonic = { version = "0.4.0", features = ["tls", "transport"] }
 prost-types = "0.7"
 prost = "0.7"
 
@@ -24,13 +24,14 @@ serde = "1.0.123"
 serde_json = "1.0.62"
 
 # log
-env_logger = "0.8.3"
+simple_logger = "1.11.0"
 log = "0.4.14"
 toml = "0.5.8"
 
 # async tokio shit
 futures = "0.3.12"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["rt", "sync"] }
+tokio-stream = { version =  "0.1", features = ["net"] }
 redis = { version = "0.17.0", features = ["tokio-comp"] }
 
 [build-dependencies]

@@ -1,11 +1,9 @@
+pub mod model;
 pub mod protobuf;
+pub mod service;
 
-use log::debug;
-use redis::AsyncCommands;
 use serde::{Deserialize, Serialize};
-use serde_json::to_string;
-use std::{error::Error, fs::read_to_string, sync::Arc};
-use tokio::{sync::Mutex, time::Instant};
+use std::{error::Error, fs::read_to_string};
 use toml::from_str;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
@@ -14,27 +12,6 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 pub struct Config {
   pub token: String,
   pub redis: String,
-}
-
-pub async fn push_event<T: Serialize + Send + 'static>(
-  redis: Arc<Mutex<redis::aio::Connection>>,
-  name: impl Into<String> + Send + 'static,
-  event: Box<T>,
-) -> Result<()> {
-  let mut redis = redis.lock().await;
-  let d = Instant::now();
-
-  redis
-    .rpush::<String, String, u64>(
-      format!("gateway:event:{}", name.into()),
-      to_string(&event).unwrap(),
-    )
-    .await
-    .unwrap();
-
-  let t = d.elapsed().as_micros();
-  debug!("rpush time: {}", t);
-  Ok(())
 }
 
 pub fn config() -> Result<Config> {

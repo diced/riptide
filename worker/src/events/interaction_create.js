@@ -15,7 +15,7 @@ module.exports = class extends Event {
    */
   async exec(msg) {
     if (!msg.guild_id) return;
-    const interactionToCmd = `r${msg.command_data.name} ${msg.command_data.options.map(v=>v.value).join(' ')}`;
+    const interactionToCmd = `r${msg.command_data.name} ${msg.command_data.options.map(v=>v[v.command_data].value).join(' ')}`;
     const prefix = 'r';
 
     const lexer = new Lexer(interactionToCmd).setQuotes([
