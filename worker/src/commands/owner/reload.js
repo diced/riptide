@@ -4,13 +4,16 @@ const Context = require('../../structures/Context');
 
 module.exports = class extends Command {
   constructor(client) {
-    super({
-      name: 'reload',
-      aliases: ['r'],
-      devOnly: true
-    }, client);
+    super(
+      {
+        name: 'reload',
+        aliases: ['r'],
+        devOnly: true
+      },
+      client
+    );
   }
-  
+
   /**
    * @param {Context} ctx
    * @param {Args?} args
@@ -28,8 +31,7 @@ module.exports = class extends Command {
         await this.client.handler.loadEvents(true);
         return ctx.reply({ content: 'Reloaded everything.' });
       }
-    }
-    catch (err) {
+    } catch (err) {
       return ctx.reply({
         content: `**Error:** \`\`\`prolog\n${err}\`\`\``
       });

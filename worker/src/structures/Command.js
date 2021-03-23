@@ -1,12 +1,10 @@
-const { Args } = require("lexure");
-const Client = require("./Client");
-const Context = require("./Context");
+const Client = require('./Client');
 
 class Command {
   /**
    * @constructor
-   * @param {*} options 
-   * @param {Client} client 
+   * @param {*} options
+   * @param {Client} client
    */
   constructor(options, client) {
     /**

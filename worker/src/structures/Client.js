@@ -7,6 +7,7 @@ const { Manager } = require('lavaclient');
 const { loadPackageDefinition, credentials } = require('@grpc/grpc-js');
 const { loadSync } = require('@grpc/proto-loader');
 const { existsSync } = require('fs');
+const { InfluxDB, Point } = require('@influxdata/influxdb-client');
 const { join } = require('path');
 const fastify = require('fastify');
 
@@ -81,17 +82,50 @@ class Client extends EventEmitter {
         ...this.config.lavalink[id]
       })),
       {
-        send: (guild, payload) =>
-          this.redis.rpush('gateway:dispatch', JSON.stringify(payload)),
+        send: (guild, payload) => {
+          if (payload.op === 4) {
+            this.grpc.asyncService.updateVoiceState({ ...payload.d });
+          }
+        },
         plugins: [new QueuePlugin()]
       }
     );
+
+    /**
+     * InfluxDB Client
+     * @type {InfluxDB}
+     */
+    this.influx = new InfluxDB({
+      url: this.config.influx.url,
+      token: this.config.influx.token
+    });
 
     this.devs = [
       '328983966650728448',
       '463145592969887745',
       '127888387364487168'
     ];
+  }
+
+  async writeMemoryMetrics() {
+    const api = this.influx.getWriteApi(
+      this.config.influx.org,
+      this.config.influx.bucket
+    );
+    const mem = process.memoryUsage();
+    const gw = await this.grpc.asyncService.getStats();
+    api.writePoint(
+      new Point('worker_memory')
+        .intField('heap_total', mem.heapTotal)
+        .intField('heap_used', mem.heapUsed)
+        .intField('rss', mem.rss)
+    );
+    api.writePoint(
+      new Point('gateway_memory')
+        .intField('alloc', Number(gw.alloc))
+        .intField('res', Number(gw.res))
+    );
+    await api.close();
   }
 
   async start() {
@@ -111,7 +145,7 @@ class Client extends EventEmitter {
       native: true,
       entities: [new EntitySchema(require('../entities/User'))],
       synchronize: true,
-      ...this.config.database
+      url: this.config.database_url
     });
 
     const path = existsSync('protobuf') ? './protobuf' : '../protobuf';
@@ -119,7 +153,8 @@ class Client extends EventEmitter {
       loadSync(
         [
           join(path, 'gateway', 'v1', 'cache_service.proto'),
-          join(path, 'gateway', 'v1', 'dispatch_service.proto')
+          join(path, 'gateway', 'v1', 'dispatch_service.proto'),
+          join(path, 'gateway', 'v1', 'gateway_service.proto')
         ],
         {
           keepCase: true,
@@ -143,16 +178,31 @@ class Client extends EventEmitter {
         this.logger.debug(`recieved event ${name}`);
       });
 
-    const service = new packageDefinition.pylon.gateway.v1.service.GatewayCache(
+    const cacheService = new packageDefinition.pylon.gateway.v1.service.GatewayCache(
       'localhost:50051',
       credentials.createInsecure()
     );
+    const gatewayService = new packageDefinition.pylon.gateway.v1.service.Gateway(
+      'localhost:50051',
+      credentials.createInsecure()
+    );
+
     const asyncService = {};
 
-    for (const b of Object.keys(Object.getPrototypeOf(service))) {
+    for (const b of Object.keys(Object.getPrototypeOf(cacheService))) {
       asyncService[b] = (data) =>
         new Promise((res, rej) => {
-          service[b](data, (err, d) => {
+          cacheService[b](data, (err, d) => {
+            if (err) rej(err);
+            res(d);
+          });
+        });
+    }
+
+    for (const b of Object.keys(Object.getPrototypeOf(gatewayService))) {
+      asyncService[b] = (data) =>
+        new Promise((res, rej) => {
+          gatewayService[b](data, (err, d) => {
             if (err) rej(err);
             res(d);
           });
@@ -161,7 +211,8 @@ class Client extends EventEmitter {
 
     this.grpc = {
       packageDefinition,
-      service,
+      cacheService,
+      gatewayService,
       asyncService
     };
 
@@ -172,6 +223,9 @@ class Client extends EventEmitter {
 
     this.api.listen(50642, () => this.logger.info('Listening on ::50642'));
     await this.manager.init(this.config.id);
+
+    await this.writeMemoryMetrics();
+    setInterval(() => this.writeMemoryMetrics(), 15000);
   }
 }
 
