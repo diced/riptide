@@ -9,6 +9,9 @@ pub mod discord {
     pub mod event {
       tonic::include_proto!("pylon.discord.v1.event");
     }
+    pub mod gateway {
+      tonic::include_proto!("pylon.discord.v1.gateway");
+    }
   }
 }
 

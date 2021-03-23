@@ -7,7 +7,7 @@ use twilight_model::{
   guild::PartialMember,
   id::GuildId,
   user::User,
-  voice::VoiceState,
+  voice::VoiceState
 };
 
 use crate::{
@@ -15,48 +15,48 @@ use crate::{
     event::{
       event_envelope::EventData,
       voice_server_update_event::PayloadData as VoiceServerUpdateEventData, EventEnvelope,
-      InteractionCreateEvent, MessageCreateEvent, VoiceServerUpdateEvent, VoiceStateUpdateEvent,
+      InteractionCreateEvent, MessageCreateEvent, VoiceServerUpdateEvent, VoiceStateUpdateEvent
     },
     model::{
       command_data_option::{
-        CommandData as CommandDataEnum, CommandDataBoolean, CommandDataInteger, CommandDataString,
+        CommandData as CommandDataEnum, CommandDataBoolean, CommandDataInteger, CommandDataString
       },
       CommandData, CommandDataOption, InteractionData, MemberData, MessageData, SnowflakeValue,
-      UserData, VoiceStateData,
-    },
+      UserData, VoiceStateData
+    }
   },
-  Result,
+  Result
 };
 
 pub fn create_event(event: Event) -> Result<EventEnvelope> {
   let event_data = match event {
     Event::MessageCreate(e) => Some(EventData::MessageCreateEvent(MessageCreateEvent {
       scope: None,
-      payload: Some(convert_message_create(e)?),
+      payload: Some(convert_message_create(e)?)
     })),
     Event::InteractionCreate(e) => {
       Some(EventData::InteractionCreateEvent(InteractionCreateEvent {
         scope: None,
-        payload: convert_interaction_create(e),
+        payload: convert_interaction_create(e)
       }))
     }
     Event::VoiceServerUpdate(e) => {
       Some(EventData::VoiceServerUpdateEvent(VoiceServerUpdateEvent {
         scope: None,
-        payload: Some(convert_voice_server_update(e)),
+        payload: Some(convert_voice_server_update(e))
       }))
     }
     Event::VoiceStateUpdate(e) => Some(EventData::VoiceStateUpdateEvent(VoiceStateUpdateEvent {
       scope: None,
       payload: Some(convert_voice_state_update(e)),
-      previously_cached: None,
+      previously_cached: None
     })),
-    _ => None,
+    _ => None
   };
 
   Ok(EventEnvelope {
     header: None,
-    event_data,
+    event_data
   })
 }
 
@@ -68,13 +68,13 @@ pub fn convert_voice_state(state: Arc<VoiceState>) -> VoiceStateData {
   VoiceStateData {
     channel_id: match state.channel_id {
       None => None,
-      Some(id) => Some(SnowflakeValue { value: id.0 }),
+      Some(id) => Some(SnowflakeValue { value: id.0 })
     },
     member: None,
     session_id: Some(state.session_id.as_str().to_string()),
     guild_id: match state.guild_id {
       None => 0_u64,
-      Some(g) => g.0,
+      Some(g) => g.0
     },
     self_mute: state.self_mute,
     self_deaf: state.self_deaf,
@@ -82,7 +82,7 @@ pub fn convert_voice_state(state: Arc<VoiceState>) -> VoiceStateData {
     self_stream: false,
     mute: state.mute,
     deaf: state.deaf,
-    suppress: false,
+    suppress: false
   }
 }
 
@@ -90,10 +90,10 @@ pub fn convert_voice_server_update(update: VoiceServerUpdate) -> VoiceServerUpda
   VoiceServerUpdateEventData {
     guild_id: match update.guild_id {
       None => 0_u64,
-      Some(g) => g.0,
+      Some(g) => g.0
     },
     token: update.token,
-    endpoint: update.endpoint.unwrap_or_else(|| "".to_string()),
+    endpoint: update.endpoint.unwrap_or_else(|| "".to_string())
   }
 }
 
@@ -106,17 +106,17 @@ pub fn convert_interaction_create(msg: Box<InteractionCreate>) -> Option<Interac
         Some(e.guild_id),
         Some(e.member.clone().user.unwrap()),
         Some(e.member),
-        false,
+        false
       ),
       id: e.id.0,
       token: e.token,
       command_data: Some(CommandData {
         id: e.command_data.id.0,
         name: e.command_data.name,
-        options: convert_command_options(e.command_data.options),
-      }),
+        options: convert_command_options(e.command_data.options)
+      })
     }),
-    _ => None,
+    _ => None
   }
 }
 
@@ -127,13 +127,13 @@ pub fn convert_message_create(msg: Box<MessageCreate>) -> Result<MessageData> {
     channel_id: msg.channel_id.0,
     guild_id: match msg.guild_id {
       None => None,
-      Some(g) => Some(SnowflakeValue { value: g.0 }),
+      Some(g) => Some(SnowflakeValue { value: g.0 })
     },
     content: msg.content.to_string(),
     timestamp: msg.timestamp.to_string(),
     edited_timestamp: match msg.edited_timestamp.clone() {
       Some(s) => Some(s.to_string()),
-      None => None,
+      None => None
     },
     mention_roles: None,
     tts: false,
@@ -150,7 +150,7 @@ pub fn convert_message_create(msg: Box<MessageCreate>) -> Result<MessageData> {
     message_reference: None,
     author: convert_user(msg.0.author.clone()),
     member: convert_member(msg.guild_id, Some(msg.0.author), msg.0.member, true),
-    webhook_id: None,
+    webhook_id: None
   })
 }
 
@@ -162,20 +162,20 @@ pub fn convert_command_options(options: Vec<TwilightCommandDataOption>) -> Vec<C
       TwilightCommandDataOption::String { name, value } => new_options.push(CommandDataOption {
         command_data: Some(CommandDataEnum::DataString(CommandDataString {
           name,
-          value,
-        })),
+          value
+        }))
       }),
       TwilightCommandDataOption::Integer { name, value } => new_options.push(CommandDataOption {
         command_data: Some(CommandDataEnum::DataInteger(CommandDataInteger {
           name,
-          value: value as u64,
-        })),
+          value: value as u64
+        }))
       }),
       TwilightCommandDataOption::Boolean { name, value } => new_options.push(CommandDataOption {
         command_data: Some(CommandDataEnum::DataBoolean(CommandDataBoolean {
           name,
-          value,
-        })),
+          value
+        }))
       }),
       _ => {}
     }
@@ -188,7 +188,7 @@ pub fn convert_member(
   guild_id: Option<GuildId>,
   user: Option<User>,
   member: Option<PartialMember>,
-  hide_user: bool,
+  hide_user: bool
 ) -> Option<MemberData> {
   match guild_id {
     Some(g) => match member {
@@ -201,13 +201,13 @@ pub fn convert_member(
           roles: vec![],
           joined_at: member.joined_at,
           premium_since: None,
-          permissions: 0,
+          permissions: 0
         }),
-        None => None,
+        None => None
       },
-      None => None,
+      None => None
     },
-    None => None,
+    None => None
   }
 }
 
@@ -217,6 +217,6 @@ pub fn convert_user(user: User) -> Option<UserData> {
     username: user.name,
     avatar: user.avatar,
     discriminator: user.discriminator.parse::<u32>().unwrap(),
-    bot: user.bot,
+    bot: user.bot
   })
 }

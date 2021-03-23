@@ -1,25 +1,34 @@
-use crate::{model::convert_voice_state, protobuf::{
-  discord::v1::{
-    cache::{
-      GetGuildMemberVoiceStateRequest, GetGuildMemberVoiceStateResponse, GetGuildRequest,
-      GetGuildResponse, GetRiptideStatsRequest, GetRiptideStatsResponse
+use crate::{
+  cache::Cache,
+  model::convert_voice_state,
+  protobuf::{
+    discord::v1::{
+      cache::{
+        FindGuildMembersRequest, FindGuildMembersResponse, GetGuildChannelRequest,
+        GetGuildChannelResponse, GetGuildEmojiRequest, GetGuildEmojiResponse,
+        GetGuildMemberPresenceRequest, GetGuildMemberPresenceResponse, GetGuildMemberRequest,
+        GetGuildMemberResponse, GetGuildMemberVoiceStateRequest, GetGuildMemberVoiceStateResponse,
+        GetGuildRequest, GetGuildResponse, GetGuildRoleRequest, GetGuildRoleResponse,
+        GetUserRequest, GetUserResponse, ListGuildChannelVoiceStatesRequest,
+        ListGuildChannelVoiceStatesResponse, ListGuildChannelsRequest, ListGuildChannelsResponse,
+        ListGuildEmojisRequest, ListGuildEmojisResponse, ListGuildMembersRequest,
+        ListGuildMembersResponse, ListGuildRolesRequest, ListGuildRolesResponse
+      },
+      model::GuildData
     },
-    model::{GuildData, RiptideStatsData}
-  },
-  gateway::v1::service::gateway_cache_server::GatewayCache
-}};
-use jemalloc_ctl::stats;
+    gateway::v1::service::gateway_cache_server::GatewayCache
+  }
+};
 use tonic::{Request, Response, Status};
-use twilight_cache_inmemory::InMemoryCache;
 use twilight_model::id::{GuildId, UserId};
 
 #[derive(Default)]
 pub struct GatewayCacheService {
-  pub cache: InMemoryCache,
+  pub cache: Cache
 }
 
 impl GatewayCacheService {
-  pub fn new(cache: InMemoryCache) -> Self {
+  pub fn new(cache: Cache) -> Self {
     Self { cache }
   }
 }
@@ -28,7 +37,7 @@ impl GatewayCacheService {
 impl GatewayCache for GatewayCacheService {
   async fn get_guild(
     &self,
-    request: Request<GetGuildRequest>,
+    request: Request<GetGuildRequest>
   ) -> std::result::Result<Response<GetGuildResponse>, Status> {
     let req = request.into_inner();
 
@@ -39,7 +48,7 @@ impl GatewayCache for GatewayCacheService {
           name: guild.name.to_string(),
           icon: match guild.icon.clone() {
             None => None,
-            Some(id) => Some(id),
+            Some(id) => Some(id)
           },
           owner_id: guild.owner_id.0,
           splash: None,
@@ -62,40 +71,109 @@ impl GatewayCache for GatewayCacheService {
           banner: None,
           premium_tier: 0,
           premium_subscription_count: 0,
-          unavailable: guild.unavailable,
-        }),
+          unavailable: guild.unavailable
+        })
       })),
-      None => Ok(Response::new(GetGuildResponse { guild: None })),
+      None => Ok(Response::new(GetGuildResponse { guild: None }))
     }
   }
 
   async fn get_guild_member_voice_state(
     &self,
-    request: Request<GetGuildMemberVoiceStateRequest>,
+    request: Request<GetGuildMemberVoiceStateRequest>
   ) -> std::result::Result<Response<GetGuildMemberVoiceStateResponse>, Status> {
     let req = request.into_inner();
-    match self
-      .cache
-      .voice_state(UserId(req.user_id), GuildId(req.guild_id))
-    {
+    match self.cache.voice_state(UserId(req.user_id)) {
       Some(state) => Ok(Response::new(GetGuildMemberVoiceStateResponse {
         voice_state_data: Some(convert_voice_state(state))
       })),
       None => Ok(Response::new(GetGuildMemberVoiceStateResponse {
-        voice_state_data: None,
-      })),
+        voice_state_data: None
+      }))
     }
   }
 
-  async fn get_riptide_stats(
+  async fn list_guild_channels(
     &self,
-    _request: Request<GetRiptideStatsRequest>,
-  ) -> std::result::Result<Response<GetRiptideStatsResponse>, Status> {
-    let alloc: u64 = stats::allocated::read().unwrap() as u64;
-    let res: u64 = stats::resident::read().unwrap() as u64;
+    _request: Request<ListGuildChannelsRequest>
+  ) -> Result<Response<ListGuildChannelsResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
 
-    Ok(Response::new(GetRiptideStatsResponse {
-      stats: Some(RiptideStatsData { alloc, res }),
-    }))
+  async fn get_guild_channel(
+    &self,
+    _request: Request<GetGuildChannelRequest>
+  ) -> Result<Response<GetGuildChannelResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn list_guild_members(
+    &self,
+    _request: Request<ListGuildMembersRequest>
+  ) -> Result<Response<ListGuildMembersResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn get_guild_member(
+    &self,
+    _request: Request<GetGuildMemberRequest>
+  ) -> Result<Response<GetGuildMemberResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn find_guild_members(
+    &self,
+    _request: Request<FindGuildMembersRequest>
+  ) -> Result<Response<FindGuildMembersResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn get_guild_member_presence(
+    &self,
+    _request: Request<GetGuildMemberPresenceRequest>
+  ) -> Result<Response<GetGuildMemberPresenceResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn list_guild_roles(
+    &self,
+    _request: Request<ListGuildRolesRequest>
+  ) -> Result<Response<ListGuildRolesResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn get_guild_role(
+    &self,
+    _request: Request<GetGuildRoleRequest>
+  ) -> Result<Response<GetGuildRoleResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn list_guild_emojis(
+    &self,
+    _request: Request<ListGuildEmojisRequest>
+  ) -> Result<Response<ListGuildEmojisResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn get_guild_emoji(
+    &self,
+    _request: Request<GetGuildEmojiRequest>
+  ) -> Result<Response<GetGuildEmojiResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn list_guild_channel_voice_states(
+    &self,
+    _request: Request<ListGuildChannelVoiceStatesRequest>
+  ) -> Result<Response<ListGuildChannelVoiceStatesResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
+  }
+
+  async fn get_user(
+    &self,
+    _request: Request<GetUserRequest>
+  ) -> Result<Response<GetUserResponse>, Status> {
+    Err(Status::unimplemented("not implemented"))
   }
 }

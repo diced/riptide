@@ -33,6 +33,10 @@ futures = "0.3.12"
 tokio = { version = "1", features = ["rt", "sync"] }
 tokio-stream = { version =  "0.1", features = ["net"] }
 redis = { version = "0.17.0", features = ["tokio-comp"] }
+sentry = "0.21.0"
+dashmap = "4.0.2"
+prometheus = "0.12.0"
+hyper = "0.14.4"
 
 [build-dependencies]
 tonic-build = { version = "0.4.0", features = ["prost"] }

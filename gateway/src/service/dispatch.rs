@@ -4,8 +4,8 @@ use crate::{
   model::create_event,
   protobuf::{
     discord::v1::event::{EventEnvelope, EventEnvelopeAck},
-    gateway::v1::service::gateway_dispatch_streaming_server::GatewayDispatchStreaming,
-  },
+    gateway::v1::service::gateway_dispatch_streaming_server::GatewayDispatchStreaming
+  }
 };
 use futures::Stream;
 use log::info;
@@ -16,13 +16,13 @@ use twilight_gateway::Event;
 
 #[derive(Debug)]
 pub struct GatewayDispatchService {
-  event_rx: Arc<Mutex<Receiver<Event>>>,
+  event_rx: Arc<Mutex<Receiver<Event>>>
 }
 
 impl GatewayDispatchService {
   pub fn new(rx: Receiver<Event>) -> Self {
     Self {
-      event_rx: Arc::new(Mutex::new(rx)),
+      event_rx: Arc::new(Mutex::new(rx))
     }
   }
 }
@@ -31,11 +31,10 @@ impl GatewayDispatchService {
 impl GatewayDispatchStreaming for GatewayDispatchService {
   type EventStream =
     Pin<Box<dyn Stream<Item = Result<EventEnvelope, tonic::Status>> + Send + Sync + 'static>>;
-  // type EventStream = tokio_stream::wrappers::ReceiverStream<Result<EventEnvelope, tonic::Status>>;
 
   async fn event(
     &self,
-    _request: tonic::Request<tonic::Streaming<EventEnvelopeAck>>,
+    _request: tonic::Request<tonic::Streaming<EventEnvelopeAck>>
   ) -> Result<Response<Self::EventStream>, Status> {
     info!("client listening");
 
@@ -52,7 +51,9 @@ impl GatewayDispatchStreaming for GatewayDispatchService {
             | Event::InteractionCreate(_)
             | Event::VoiceServerUpdate(_)
             | Event::VoiceStateUpdate(_) => {
-              tx.send(Ok(create_event(event.clone()).unwrap())).await.unwrap();
+              tx.send(Ok(create_event(event.clone()).unwrap()))
+                .await
+                .unwrap();
               info!("sending {:?}", event.kind());
             }
             _ => {}
@@ -62,6 +63,5 @@ impl GatewayDispatchStreaming for GatewayDispatchService {
     });
 
     Ok(Response::new(Box::pin(ReceiverStream::new(rx))))
-    // Ok(Response::new(RecieverStream::new(rx)))
   }
 }

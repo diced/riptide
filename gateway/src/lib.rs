@@ -1,6 +1,9 @@
+pub mod cache;
+pub mod client;
 pub mod model;
 pub mod protobuf;
 pub mod service;
+pub mod stats;
 
 use serde::{Deserialize, Serialize};
 use std::{error::Error, fs::read_to_string};
@@ -11,7 +14,7 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync>>;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
   pub token: String,
-  pub redis: String,
+  pub sentry_dsn: String
 }
 
 pub fn config() -> Result<Config> {
