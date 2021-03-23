@@ -1,8 +1,15 @@
 token = "token"
-redis = "redis://redis"
+id = "id"
+secret = "client secret"
+redirect_uri = "https://riptide.diced.wtf/callback"
+database_url = "postgres://riptide:riptide@postgres/riptide"
+sentry_dsn = "https://???@???.ingest.sentry.io/???"
 
-[database]
-url = "postgres://riptide:riptide@postgres/riptide"
+[influx] # influxdb 2
+url = "http://influx:8086"
+token = "influx token"
+org = "influx org"
+bucket = "influx bucket"
 
 [lavalink.main]
 host = "lavalink"
