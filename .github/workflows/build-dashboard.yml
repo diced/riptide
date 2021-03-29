@@ -10,6 +10,7 @@ jobs:
   build:
     name: Build Dashboard
     runs-on: ubuntu-latest
+    working-directory: ./dashboard
     strategy:
       matrix:
         node-version: [14.x]
