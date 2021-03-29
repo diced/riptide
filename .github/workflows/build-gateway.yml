@@ -1,0 +1,19 @@
+name: Build Gateway
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'dashboard/**'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build Gateway
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --verbose
