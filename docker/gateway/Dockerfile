@@ -30,7 +30,6 @@ WORKDIR /opt/gateway
 COPY protobuf ./protobuf
 COPY gateway/Cargo.lock ./Cargo.lock
 COPY gateway/Cargo.toml ./Cargo.toml
-COPY config.toml ./config.toml
 
 RUN mkdir ./src/
 
@@ -48,6 +47,6 @@ ARG TARGET
 WORKDIR /opt
 
 COPY --from=build /gateway /opt/gateway
-COPY config.toml ./config.toml
+COPY config.toml* ./config.toml
 
 CMD ./gateway

@@ -7,7 +7,7 @@ WORKDIR /opt/worker
 
 COPY protobuf ./protobuf
 COPY worker/. .
-COPY config.toml .
+COPY config.toml* .
 
 ENV CXXFLAGS="-w"
 
