@@ -10,7 +10,6 @@ edition = "2018"
 # discord
 twilight-gateway = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
 twilight-model = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
-twilight-cache-inmemory = { git = "https://github.com/Erk-/twilight", branch = "feature/slash" }
 
 jemallocator = "0.3.0"
 jemalloc-ctl = "0.3.3"
