@@ -5,12 +5,12 @@ on:
       - master
     paths:
       - "dashboard/**"
+      - ".github/workflows/build-dashboard.yml"
 
 jobs:
   build:
     name: Build Dashboard
     runs-on: ubuntu-latest
-    working-directory: ./dashboard
     strategy:
       matrix:
         node-version: [14.x]
@@ -18,8 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
+        working-directory: ./dashboard
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: cd npm ci
       - run: npm run build --if-present

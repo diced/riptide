@@ -4,7 +4,8 @@ on:
     branches:
       - master
     paths:
-      - "gateway/**"
+      - "worker/**"
+      - ".github/workflows/push-worker.yml"
 
 jobs:
   push:
@@ -20,5 +21,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: diced/riptide/worker
-          dockerfile: docker/gateway/Dockerfile
+          dockerfile: docker/worker/Dockerfile
           tag_with_ref: true

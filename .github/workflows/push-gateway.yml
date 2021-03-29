@@ -5,6 +5,7 @@ on:
       - master
     paths:
       - 'gateway/**'
+      - ".github/workflows/push-gateway.yml"
 
 jobs:
   push:

@@ -5,6 +5,7 @@ on:
       - master
     paths:
       - 'dashboard/**'
+      - ".github/workflows/build-gateway.yml"
 
 env:
   CARGO_TERM_COLOR: always
