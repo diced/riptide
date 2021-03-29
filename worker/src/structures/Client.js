@@ -1,4 +1,3 @@
-const Redis = require('ioredis');
 const { createConnection, EntitySchema } = require('typeorm');
 const { Logger } = require('@ayana/logger');
 const { EventEmitter } = require('eventemitter3');
@@ -33,13 +32,7 @@ class Client extends EventEmitter {
      * @type {*} options
      */
     this.options = options;
-
-    /**
-     * Redis
-     * @type {Redis} redis
-     */
-    this.redis = new Redis(this.config.redis);
-
+    
     /**
      * Handler
      * @type {Handler} handler
