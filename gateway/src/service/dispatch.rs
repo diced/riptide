@@ -42,8 +42,8 @@ impl GatewayDispatchStreaming for GatewayDispatchService {
 
     let lock = self.event_rx.clone();
     tokio::spawn(async move {
-      let mut event_rx = lock.lock().await;
       loop {
+        let mut event_rx = lock.lock().await;
         #[allow(irrefutable_let_patterns)]
         if let (event) = event_rx.recv().await.unwrap() {
           match event {
