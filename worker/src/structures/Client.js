@@ -32,7 +32,7 @@ class Client extends EventEmitter {
      * @type {*} options
      */
     this.options = options;
-    
+
     /**
      * Handler
      * @type {Handler} handler
@@ -76,6 +76,7 @@ class Client extends EventEmitter {
       })),
       {
         send: (guild, payload) => {
+          console.log(payload);
           if (payload.op === 4) {
             this.grpc.asyncService.updateVoiceState({ ...payload.d });
           }
